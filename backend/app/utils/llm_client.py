@@ -117,4 +117,15 @@ class LLMClient:
         try:
             return json.loads(cleaned_response)
         except json.JSONDecodeError:
-            raise ValueError(f"Invalid JSON format from LLM: {cleaned_response}")
+            pass
+
+        # Providers that ignore response_format (e.g. Anthropic's OpenAI-compatible
+        # endpoint) may wrap the JSON in prose — fall back to the outermost object
+        start, end = cleaned_response.find('{'), cleaned_response.rfind('}')
+        if start != -1 and end > start:
+            try:
+                return json.loads(cleaned_response[start:end + 1])
+            except json.JSONDecodeError:
+                pass
+
+        raise ValueError(f"Invalid JSON format from LLM: {cleaned_response}")

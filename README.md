@@ -15,6 +15,19 @@
 
 </div>
 
+## About this fork (miroLocalOk)
+
+This is a modified version of [MiroFish-Offline](https://github.com/nikmcfly/MiroFish-Offline) by nikmcfly, itself a fork of [MiroFish](https://github.com/666ghj/MiroFish) by 666ghj. Changes in this fork:
+
+- **No Ollama.** Embeddings run inside the backend process with [FastEmbed](https://github.com/qdrant/fastembed) (ONNX Runtime, CPU), and the model is baked into the Docker image.
+- **Multilingual embeddings.** Defaults to `sentence-transformers/paraphrase-multilingual-mpnet-base-v2` (768 dims, same Neo4j index), which handles Portuguese and other languages far better than `nomic-embed-text`.
+- **Cloud LLM, local memory.** The LLM is any OpenAI-compatible API (tested with OpenAI `gpt-4.1-mini`), while the graph memory stays local in Neo4j.
+- JSON parsing tolerates providers that ignore `response_format`, and every LLM call sends an explicit `max_tokens`.
+- `docker-compose.yml` runs only the app and Neo4j.
+- `exemplos/` holds sample seed documents (in Portuguese).
+
+Quick start: copy `.env.example` to `.env`, set `LLM_API_KEY`, `LLM_BASE_URL` and `LLM_MODEL_NAME`, then run `docker compose up -d --build` and open http://localhost:3000.
+
 ## What is this?
 
 MiroFish is a multi-agent simulation engine: upload any document (press release, policy draft, financial report), and it generates hundreds of AI agents with unique personalities that simulate the public reaction on social media. Posts, arguments, opinion shifts — hour by hour.

@@ -1,0 +1,72 @@
+Proposta: Verificação automática de vulnerabilidades com PR de segurança vinculado e bloqueante
+
+Contexto da empresa
+
+A empresa é uma multinacional de tecnologia com dezenas de times de desenvolvimento
+distribuídos em vários países e fusos horários. Cada time é dono de seus próprios
+repositórios e tem autonomia sobre seu fluxo de trabalho. Os times variam bastante em
+tamanho, maturidade e tipo de produto: alguns mantêm sistemas legados críticos, outros
+desenvolvem produtos novos com entregas frequentes. A área de Segurança da Informação
+(AppSec) é centralizada e atende todos os times. Existe também um time de Plataforma
+(DevOps) responsável pelas ferramentas de CI/CD e pelos pipelines compartilhados.
+
+Como funciona hoje
+
+Os desenvolvedores trabalham normalmente em suas tarefas, criam uma branch, implementam a
+funcionalidade nova ou a melhoria e abrem um Pull Request (PR). O PR passa por revisão de
+código de outro membro do time e pelos testes automatizados do pipeline. Depois de aprovado,
+é integrado à branch principal. Hoje a análise de segurança acontece de forma pontual, em
+auditorias periódicas feitas pelo time de AppSec, e as vulnerabilidades encontradas viram
+tarefas no backlog dos times, sem prazo obrigatório.
+
+O que está sendo proposto
+
+A proposta adiciona uma camada automática de verificação de vulnerabilidades ao fluxo de
+Pull Requests:
+
+1. O desenvolvedor continua trabalhando normalmente e abre o PR principal com a
+   funcionalidade ou melhoria.
+2. Ao abrir o PR, uma ferramenta automática analisa o código alterado e suas dependências
+   em busca de vulnerabilidades (por exemplo: injeção de SQL, segredos expostos no código,
+   bibliotecas com falhas conhecidas, configurações inseguras).
+3. Se for encontrada alguma vulnerabilidade, a ferramenta gera automaticamente um PR de
+   segurança próprio, com a correção sugerida ou com a descrição do problema.
+4. Esse PR de segurança fica vinculado ao PR principal.
+5. Enquanto o PR de segurança não for resolvido (corrigido e aprovado), o PR principal fica
+   bloqueado e não pode ser integrado.
+6. Se nenhuma vulnerabilidade for encontrada, o PR principal segue o fluxo normal, sem
+   etapas extras.
+
+Objetivo
+
+O objetivo é encontrar e corrigir falhas de segurança antes que cheguem à produção, em vez
+de descobri-las meses depois em auditorias. A proposta também pretende deixar claro quem é
+responsável por corrigir cada vulnerabilidade: o próprio time que introduziu a mudança, no
+momento em que ela é feita.
+
+Plano de implantação
+
+A funcionalidade será testada inicialmente em um piloto com repositórios pequenos, de
+poucos times voluntários. Os resultados do piloto (quantidade de vulnerabilidades
+encontradas, tempo extra até a integração dos PRs, quantidade de falsos positivos e
+percepção dos desenvolvedores) serão avaliados antes de decidir se a funcionalidade será
+expandida para os demais repositórios da empresa.
+
+Grupos afetados
+
+- Desenvolvedores, que abrem os PRs e terão que resolver os PRs de segurança.
+- Tech leads e revisores de código, que aprovam os PRs.
+- Time de Segurança da Informação (AppSec), que define as regras da verificação.
+- Time de Plataforma / DevOps, que vai implantar e manter a ferramenta nos pipelines.
+- Gerentes de produto e de engenharia, responsáveis por prazos e entregas.
+- Liderança executiva e área de compliance, preocupadas com risco e auditorias.
+
+Pontos ainda em aberto
+
+- Quem pode liberar um PR principal bloqueado em caso de urgência, como uma correção
+  crítica em produção.
+- Como tratar falsos positivos, ou seja, alertas de vulnerabilidade que não são problemas
+  reais.
+- Qual nível de gravidade deve bloquear o PR e qual deve apenas gerar um aviso.
+- Se as vulnerabilidades que já existem no código antigo também vão bloquear os novos PRs.
+- Quanto tempo extra o processo pode adicionar até uma funcionalidade chegar à produção.

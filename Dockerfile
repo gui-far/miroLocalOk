@@ -20,6 +20,10 @@ RUN npm ci \
   && npm ci --prefix frontend \
   && cd backend && uv sync
 
+# 预下载本地 embedding 模型（多语言，支持葡萄牙语），运行时无需联网下载
+ENV EMBEDDING_CACHE_DIR=/models/fastembed
+RUN cd backend && uv run python -c "from fastembed import TextEmbedding; TextEmbedding('sentence-transformers/paraphrase-multilingual-mpnet-base-v2', cache_dir='/models/fastembed')"
+
 # 复制项目源码
 COPY . .
 

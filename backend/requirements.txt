@@ -10,13 +10,16 @@ flask>=3.0.0
 flask-cors>=6.0.0
 
 # ============= LLM 相关 =============
-# OpenAI SDK（统一使用 OpenAI 格式调用 LLM / Ollama）
+# OpenAI SDK（统一使用 OpenAI 格式调用 LLM，via Anthropic's OpenAI-compatible endpoint）
 openai>=1.0.0
-# HTTP client for Ollama embedding API
 requests>=2.28.0
 
 # ============= Neo4j Graph Database =============
 neo4j>=5.15.0
+
+# ============= Local embeddings =============
+# In-process embeddings (ONNX Runtime, no torch)
+fastembed>=0.5.0
 
 # ============= OASIS 社交媒体模拟 =============
 # OASIS 社交模拟框架

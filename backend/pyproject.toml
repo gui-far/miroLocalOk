@@ -18,7 +18,10 @@ dependencies = [
     
     # Neo4j graph database driver
     "neo4j>=5.15.0",
-    
+
+    # Local in-process embeddings (ONNX Runtime, no torch)
+    "fastembed>=0.5.0",
+
     # OASIS 社交媒体模拟
     "camel-oasis==0.2.5",
     "camel-ai==0.2.78",

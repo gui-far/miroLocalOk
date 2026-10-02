@@ -29,8 +29,8 @@ class Config:
 
     # LLM configuration (unified OpenAI format)
     LLM_API_KEY = os.environ.get('LLM_API_KEY')
-    LLM_BASE_URL = os.environ.get('LLM_BASE_URL', 'http://localhost:11434/v1')
-    LLM_MODEL_NAME = os.environ.get('LLM_MODEL_NAME', 'qwen2.5:32b')
+    LLM_BASE_URL = os.environ.get('LLM_BASE_URL', 'https://api.openai.com/v1')
+    LLM_MODEL_NAME = os.environ.get('LLM_MODEL_NAME', 'gpt-4.1-mini')
 
     # Neo4j configuration
     NEO4J_URI = os.environ.get('NEO4J_URI', 'bolt://localhost:7687')
@@ -38,8 +38,9 @@ class Config:
     NEO4J_PASSWORD = os.environ.get('NEO4J_PASSWORD', 'mirofish')
 
     # Embedding configuration
-    EMBEDDING_MODEL = os.environ.get('EMBEDDING_MODEL', 'nomic-embed-text')
-    EMBEDDING_BASE_URL = os.environ.get('EMBEDDING_BASE_URL', 'http://localhost:11434')
+    # Local in-process model (FastEmbed); must produce 768-dim vectors
+    EMBEDDING_MODEL = os.environ.get('EMBEDDING_MODEL', 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
+    EMBEDDING_CACHE_DIR = os.environ.get('EMBEDDING_CACHE_DIR') or None
 
     # File upload configuration
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB
@@ -74,7 +75,7 @@ class Config:
         """Validate required configuration"""
         errors = []
         if not cls.LLM_API_KEY:
-            errors.append("LLM_API_KEY not configured (set to any non-empty value, e.g. 'ollama')")
+            errors.append("LLM_API_KEY not configured (your LLM provider API key)")
         if not cls.NEO4J_URI:
             errors.append("NEO4J_URI not configured")
         if not cls.NEO4J_PASSWORD:

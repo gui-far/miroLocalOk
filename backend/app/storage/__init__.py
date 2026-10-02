@@ -3,7 +3,7 @@ MiroFish-Offline Storage Layer
 
 Local graph storage replacing Zep Cloud:
 - Neo4j CE for graph persistence
-- Ollama for embeddings (nomic-embed-text)
+- FastEmbed for local in-process embeddings (nomic-embed-text)
 - LLM-based NER/RE extraction
 - Hybrid search (vector + keyword)
 """
